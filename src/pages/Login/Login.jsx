@@ -8,7 +8,7 @@ const Login = () => {
   const { loginWithEmailPass, googleLogin } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const location = useLocation();
-  const from = location?.state?.pathName || '/';
+  const from = location?.state?.pathname || '/';
   const navigate = useNavigate();
 
   const handleLogin = e => {

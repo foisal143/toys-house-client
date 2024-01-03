@@ -1,12 +1,56 @@
+import { useContext } from 'react';
+import { AuthContext } from '../../Authprovaider/Authprovaider';
+import toast from 'react-hot-toast';
+
 const AddToys = () => {
+  const { user } = useContext(AuthContext);
+
   const handleSubmit = e => {
     e.preventDefault();
-    // Add your logic for submitting toy data to the backend
+    const form = e.target;
+    const name = form.name.value;
+    const image = form.pictureUrl.value;
+    const seller = form.sellerName.value;
+    const sellerEmail = form.sellerEmail.value;
+    const subCategory = form.subCategory.value;
+    const quantity = form.quantity.value;
+    const rating = form.rating.value;
+    const price = form.price.value;
+    const description = form.description.value;
+    const toysInfo = {
+      name,
+      image,
+      seller,
+      sellerEmail,
+      subCategory,
+      quantity,
+      rating,
+      price,
+      description,
+    };
+
+    fetch('http://localhost:5000/toys', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(toysInfo),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.insertedId) {
+          toast.success('Toy Added Success');
+          form.reset();
+        }
+      });
   };
   return (
     <div className="container mx-auto mt-8">
       <h2 className="text-2xl font-bold text-center mb-4">Add Toy</h2>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-xl border p-3 rounded-md mx-auto"
+      >
         <div className="flex flex-wrap -mx-4 mb-4">
           <div className="w-full md:w-1/2 px-4 mb-4">
             <label
@@ -20,6 +64,7 @@ const AddToys = () => {
               className="mt-1 p-2 w-full border rounded-md"
               id="pictureUrl"
               name="pictureUrl"
+              placeholder="url"
               required
             />
           </div>
@@ -29,13 +74,14 @@ const AddToys = () => {
               htmlFor="name"
               className="block text-sm font-medium text-gray-600"
             >
-              Name:
+              Toy Name:
             </label>
             <input
               type="text"
               className="mt-1 p-2 w-full border rounded-md"
               id="name"
               name="name"
+              placeholder="name"
               required
             />
           </div>
@@ -53,8 +99,8 @@ const AddToys = () => {
               type="text"
               className="mt-1 p-2 w-full border rounded-md bg-gray-100"
               id="sellerName"
+              defaultValue={user?.displayName}
               name="sellerName"
-              readOnly
             />
           </div>
 
@@ -69,6 +115,7 @@ const AddToys = () => {
               type="email"
               className="mt-1 p-2 w-full border rounded-md bg-gray-100"
               id="sellerEmail"
+              value={user?.email}
               name="sellerEmail"
               readOnly
             />
@@ -76,20 +123,24 @@ const AddToys = () => {
         </div>
 
         <div className="flex flex-wrap -mx-4 mb-4">
-          <div className="w-full md:w-1/2 px-4 mb-4">
+          <div className=" w-full px-4 md:w-1/2 mb-4">
             <label
-              htmlFor="subCategory"
+              htmlFor="category"
               className="block text-sm font-medium text-gray-600"
             >
               Sub-category:
             </label>
-            <input
-              type="text"
-              className="mt-1 p-2 w-full border rounded-md"
-              id="subCategory"
+            <select
+              id="category"
+              className="p-2 border w-full rounded-md"
               name="subCategory"
-              required
-            />
+            >
+              <option value="">All Categories</option>
+              <option value="regular">Regular Car</option>
+              <option value="sports car">Sports Car</option>
+              <option value="truck">Truck</option>
+              {/* Add more category options as needed */}
+            </select>
           </div>
 
           <div className="w-full md:w-1/2 px-4 mb-4">
@@ -104,6 +155,7 @@ const AddToys = () => {
               className="mt-1 p-2 w-full border rounded-md"
               id="price"
               name="price"
+              placeholder="price"
               required
             />
           </div>
@@ -122,6 +174,7 @@ const AddToys = () => {
               className="mt-1 p-2 w-full border rounded-md"
               id="rating"
               name="rating"
+              placeholder="rating"
               required
             />
           </div>
@@ -138,6 +191,7 @@ const AddToys = () => {
               className="mt-1 p-2 w-full border rounded-md"
               id="quantity"
               name="quantity"
+              placeholder="quantity"
               required
             />
           </div>
@@ -154,13 +208,14 @@ const AddToys = () => {
             className="mt-1 p-2 w-full border rounded-md"
             id="description"
             name="description"
+            placeholder="description"
             required
           ></textarea>
         </div>
 
         <button
           type="submit"
-          className="w-full bg-indigo-500 text-white p-3 rounded-md hover:bg-indigo-600"
+          className="w-full bg-yellow-500  p-3 rounded-md hover:bg-yellow-600"
         >
           Add Toy
         </button>
