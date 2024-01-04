@@ -39,17 +39,18 @@ const Authprovaider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
       setLoader(false);
-      fetch(`http://localhost:5000/jwt`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({ email: currentUser?.email }),
-      })
-        .then(res => res.json())
-        .then(data => {
-          localStorage.setItem('access-token', data.token);
-        });
+
+      // fetch(`http://localhost:5000/jwt`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'content-type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ email: currentUser?.email }),
+      // })
+      //   .then(res => res.json())
+      //   .then(data => {
+      //     localStorage.setItem('access-token', data.token);
+      //   });
     });
 
     return () => unsubscribe();

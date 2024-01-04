@@ -6,7 +6,7 @@ const About = () => {
   useEffect(() => {
     AOS.init({
       offset: 200,
-      duration: 500,
+      duration: 300,
     });
   }, []);
   return (

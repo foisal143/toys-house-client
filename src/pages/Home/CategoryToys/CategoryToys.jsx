@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import CategoryToyCard from '../CategoryToyCard/CategoryToyCard';
 import AOS from 'aos';
-import { AuthContext } from '../../../Authprovaider/Authprovaider';
+
 const CategoryToys = () => {
-  const { logout } = useContext(AuthContext);
   const [category, setCategory] = useState('regular');
   const [toys, setToys] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -13,17 +12,15 @@ const CategoryToys = () => {
     fetch(`http://localhost:5000/toys?category=${category}`)
       .then(res => res.json())
       .then(data => {
-        if (!data.error) {
-          setToys(data);
-          setLoader(false);
-        }
+        setToys(data);
+        setLoader(false);
       });
   }, [category]);
 
   useEffect(() => {
     AOS.init({
       offset: 200,
-      duration: 500,
+      duration: 300,
     });
   }, []);
 
