@@ -24,17 +24,10 @@ const AllToys = () => {
       });
   }, [searchValue, limit]);
 
-  if (loader) {
-    return (
-      <div className="text-center mt-12">
-        <progress className="progress  w-56"></progress>
-      </div>
-    );
-  }
-
   return (
     <div className="mt-12 ">
       <h2 className="text-2xl font-bold text-center mb-4">All Toys</h2>
+
       <form
         onSubmit={handleSearch}
         className="flex lg:w-1/2 mx-auto items-center"
@@ -49,55 +42,62 @@ const AllToys = () => {
           Search
         </button>
       </form>
-      <div className="overflow-x-auto mt-10 pb-5">
-        <table className="table table-xs">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Seller</th>
-              <th>Toy Name</th>
-              <th>Sub-category</th>
-              <th>Price</th>
-              <th>Available Quantity</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {toys &&
-              toys.map((toy, i) => (
-                <tr key={toy._id}>
-                  <td>{i + 1}.</td>
-                  <td className="p-2">{toy.seller}</td>
-                  <td className="p-2">{toy.name}</td>
-                  <td className="p-2">{toy.subCategory}</td>
-                  <td className="p-2">${toy.price}</td>
-                  <td className="p-2">{toy.quantity}</td>
-                  <td className="p-2">
-                    <Link to={`/all-toys/${toy._id}`}>
-                      <button>
-                        <FaEye></FaEye>
-                      </button>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-        {toys.length === 20 && (
-          <div className="my-5 text-center">
-            <button onClick={() => setLimit(null)} className="btn-coustom">
-              Show More
-            </button>
-          </div>
-        )}
-        {toys.length > 20 && (
-          <div className="my-5 text-center">
-            <button onClick={() => setLimit(20)} className="btn-coustom">
-              Show Less
-            </button>
-          </div>
-        )}
-      </div>
+      {loader && (
+        <div className="text-center mt-12">
+          <progress className="progress  w-56"></progress>
+        </div>
+      )}
+      {loader || (
+        <div className="overflow-x-auto mt-10 pb-5">
+          <table className="table table-xs">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Seller</th>
+                <th>Toy Name</th>
+                <th>Sub-category</th>
+                <th>Price</th>
+                <th>Available Quantity</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {toys &&
+                toys.map((toy, i) => (
+                  <tr key={toy._id}>
+                    <td>{i + 1}.</td>
+                    <td className="p-2">{toy.seller}</td>
+                    <td className="p-2">{toy.name}</td>
+                    <td className="p-2">{toy.subCategory}</td>
+                    <td className="p-2">${toy.price}</td>
+                    <td className="p-2">{toy.quantity}</td>
+                    <td className="p-2">
+                      <Link to={`/all-toys/${toy._id}`}>
+                        <button>
+                          <FaEye></FaEye>
+                        </button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          {toys.length === 20 && (
+            <div className="my-5 text-center">
+              <button onClick={() => setLimit(null)} className="btn-coustom">
+                Show More
+              </button>
+            </div>
+          )}
+          {toys.length > 20 && (
+            <div className="my-5 text-center">
+              <button onClick={() => setLimit(20)} className="btn-coustom">
+                Show Less
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

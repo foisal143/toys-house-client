@@ -5,7 +5,6 @@ const Footer = () => {
       <aside>
         <img className="w-20 h-20" src={logo} alt="" />
         <p>
-          {' '}
           <span className="text-3xl font-bold">Toys House Ltd.</span>
           <br />
           Providing reliable Toys since 1992

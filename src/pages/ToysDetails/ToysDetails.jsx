@@ -35,7 +35,7 @@ const ToysDetails = () => {
             <strong className="text-xl">Category:</strong> {subCategory}
           </p>
           <p className="flex justify-between items-center ">
-            <span>Price: {price}</span>
+            <span>Price: ${price}</span>
             <span>
               {' '}
               <Rating
