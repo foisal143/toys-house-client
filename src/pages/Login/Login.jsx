@@ -3,7 +3,9 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Authprovaider/Authprovaider';
 import toast from 'react-hot-toast';
+import UseTitle from '../../Title/Title';
 const Login = () => {
+  UseTitle('| Login');
   const [error, setError] = useState('');
   const { loginWithEmailPass, googleLogin } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);

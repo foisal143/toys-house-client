@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 import { AuthContext } from '../../Authprovaider/Authprovaider';
 import toast from 'react-hot-toast';
+import UseTitle from '../../Title/Title';
 
 const AddToys = () => {
   const { user } = useContext(AuthContext);
-
+  UseTitle('| Add Toys');
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.target;

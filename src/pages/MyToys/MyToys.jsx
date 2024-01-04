@@ -4,12 +4,15 @@ import { AuthContext } from '../../Authprovaider/Authprovaider';
 
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
+import UseTitle from '../../Title/Title';
 
 const MyToys = () => {
+  UseTitle('| My Toys');
   const { user } = useContext(AuthContext);
+  const [loader, setLoader] = useState(true);
   const [toys, setToys] = useState([]);
   const [control, setControl] = useState(true);
-  const [updateId, setUpdateId] = useState('');
+  const [toy, setToy] = useState({});
   const handlerDelete = id => {
     Swal.fire({
       title: 'Are you sure?',
@@ -54,8 +57,8 @@ const MyToys = () => {
       price,
       description,
     };
-    console.log(updateId);
-    fetch(`http://localhost:5000/toys/${updateId}`, {
+
+    fetch(`http://localhost:5000/toys/${toy?._id}`, {
       method: 'PUT',
       headers: {
         'content-type': 'application/json',
@@ -77,57 +80,74 @@ const MyToys = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/toys?email=${user?.email}`)
+    fetch(`http://localhost:5000/toys?email=${user?.email}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('access-token')}`,
+      },
+    })
       .then(res => res.json())
-      .then(data => setToys(data));
+      .then(data => {
+        if (!data.error) {
+          setToys(data);
+          setLoader(false);
+        }
+      });
   }, [user, control]);
 
   return (
     <div className="mt-12">
       <h3 className="text-4xl font-bold text-center">My Toys Here</h3>
 
-      <div className="overflow-x-auto mt-10">
-        <table className="table table-xs">
-          <thead>
-            <tr>
-              <th>Seller</th>
-              <th>Toy Name</th>
-              <th>Sub-category</th>
-              <th>Price</th>
-              <th>Available Quantity</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {toys &&
-              toys.map(toy => (
-                <tr key={toy._id}>
-                  <td>{toy.seller}</td>
-                  <td>{toy.name}</td>
-                  <td>{toy.subCategory}</td>
-                  <td>${toy.price}</td>
-                  <td>{toy.quantity}</td>
-                  <td className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        document.getElementById('my_modal_5').showModal();
-                        setUpdateId(toy._id);
-                      }}
-                      className="bg-slate-100 p-2 rounded-full"
-                    >
-                      <FaEdit></FaEdit>
-                    </button>
-                    <button
-                      onClick={() => handlerDelete(toy._id)}
-                      className="bg-red-100 text-red-500 p-2 rounded-full"
-                    >
-                      <FaTrash></FaTrash>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+      <div className="overflow-x-auto pb-5 mt-10">
+        {loader && (
+          <div className="text-center mt-12">
+            <progress className="progress  w-56"></progress>
+          </div>
+        )}
+        {loader || (
+          <table className="table table-xs">
+            <thead>
+              <tr>
+                <th>Seller</th>
+                <th>Toy Name</th>
+                <th>Sub-category</th>
+                <th>Price</th>
+                <th>Available Quantity</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {toys &&
+                toys.map(toy => (
+                  <tr key={toy._id}>
+                    <td>{toy.seller}</td>
+                    <td>{toy.name}</td>
+                    <td>{toy.subCategory}</td>
+                    <td>${toy.price}</td>
+                    <td>{toy.quantity}</td>
+                    <td className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          document.getElementById('my_modal_5').showModal();
+                          setToy(toy);
+                        }}
+                        className="bg-slate-100 p-2 rounded-full"
+                      >
+                        <FaEdit></FaEdit>
+                      </button>
+                      <button
+                        onClick={() => handlerDelete(toy._id)}
+                        className="bg-red-100 text-red-500 p-2 rounded-full"
+                      >
+                        <FaTrash></FaTrash>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <dialog
@@ -149,7 +169,7 @@ const MyToys = () => {
                 className="mt-1 p-2 w-full border rounded-md"
                 id="name"
                 name="name"
-                placeholder="toy name"
+                defaultValue={toy.name}
                 required
               />
             </div>
@@ -166,6 +186,7 @@ const MyToys = () => {
                 className="mt-1 p-2 w-full border rounded-md"
                 id="price"
                 name="price"
+                defaultValue={toy.price}
                 placeholder="toy price"
                 required
               />
@@ -182,7 +203,7 @@ const MyToys = () => {
                 type="number"
                 className="mt-1 p-2 w-full border rounded-md"
                 id="quantity"
-                placeholder="toy quantity"
+                defaultValue={toy.quantity}
                 name="quantity"
                 required
               />
@@ -199,7 +220,7 @@ const MyToys = () => {
                 className="mt-1 p-2 w-full border rounded-md"
                 id="description"
                 name="description"
-                placeholder="description"
+                defaultValue={toy.description}
                 required
               ></textarea>
             </div>

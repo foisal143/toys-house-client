@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import CategoryToyCard from '../CategoryToyCard/CategoryToyCard';
 import AOS from 'aos';
+import { AuthContext } from '../../../Authprovaider/Authprovaider';
 const CategoryToys = () => {
+  const { logout } = useContext(AuthContext);
   const [category, setCategory] = useState('regular');
   const [toys, setToys] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -11,8 +13,10 @@ const CategoryToys = () => {
     fetch(`http://localhost:5000/toys?category=${category}`)
       .then(res => res.json())
       .then(data => {
-        setToys(data);
-        setLoader(false);
+        if (!data.error) {
+          setToys(data);
+          setLoader(false);
+        }
       });
   }, [category]);
 
@@ -26,8 +30,9 @@ const CategoryToys = () => {
   return (
     <div data-aos="fade-down" className="my-12">
       <h3 className="text-4xl font-bold text-center mb-5">Toys Shop</h3>
+
       <Tabs>
-        <TabList onChange={e => setCategory(e.target.value)}>
+        <TabList>
           <Tab onClick={() => setCategory('regular')}>Regular Car</Tab>
           <Tab onClick={() => setCategory('sports car')}>Sports Car</Tab>
           <Tab onClick={() => setCategory('truck')}>Truck</Tab>

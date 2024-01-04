@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Authprovaider/Authprovaider';
 import toast from 'react-hot-toast';
 import { updateProfile } from 'firebase/auth';
+import UseTitle from '../../Title/Title';
 
 const Register = () => {
+  UseTitle('| Register');
   const { createUser, googleLogin } = useContext(AuthContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [error, steError] = useState('');

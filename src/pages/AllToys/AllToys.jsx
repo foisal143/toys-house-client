@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import UseTitle from '../../Title/Title';
 
 const AllToys = () => {
+  UseTitle('| All Toys');
   const [toys, setToys] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [loader, setLoader] = useState(true);
-
+  const [limit, setLimit] = useState(20);
   const handleSearch = e => {
     e.preventDefault();
     const searchText = e.target.search.value;
@@ -14,13 +16,13 @@ const AllToys = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/toys?search=${searchValue}`)
+    fetch(`http://localhost:5000/toys?search=${searchValue}&&limit=${limit}`)
       .then(res => res.json())
       .then(data => {
         setToys(data);
         setLoader(false);
       });
-  }, [searchValue]);
+  }, [searchValue, limit]);
 
   if (loader) {
     return (
@@ -31,7 +33,7 @@ const AllToys = () => {
   }
 
   return (
-    <div className="mt-12">
+    <div className="mt-12 ">
       <h2 className="text-2xl font-bold text-center mb-4">All Toys</h2>
       <form
         onSubmit={handleSearch}
@@ -47,10 +49,11 @@ const AllToys = () => {
           Search
         </button>
       </form>
-      <div className="overflow-x-auto mt-10">
+      <div className="overflow-x-auto mt-10 pb-5">
         <table className="table table-xs">
           <thead>
             <tr>
+              <th></th>
               <th>Seller</th>
               <th>Toy Name</th>
               <th>Sub-category</th>
@@ -61,8 +64,9 @@ const AllToys = () => {
           </thead>
           <tbody>
             {toys &&
-              toys.map(toy => (
+              toys.map((toy, i) => (
                 <tr key={toy._id}>
+                  <td>{i + 1}.</td>
                   <td className="p-2">{toy.seller}</td>
                   <td className="p-2">{toy.name}</td>
                   <td className="p-2">{toy.subCategory}</td>
@@ -79,6 +83,20 @@ const AllToys = () => {
               ))}
           </tbody>
         </table>
+        {toys.length === 20 && (
+          <div className="my-5 text-center">
+            <button onClick={() => setLimit(null)} className="btn-coustom">
+              Show More
+            </button>
+          </div>
+        )}
+        {toys.length > 20 && (
+          <div className="my-5 text-center">
+            <button onClick={() => setLimit(20)} className="btn-coustom">
+              Show Less
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

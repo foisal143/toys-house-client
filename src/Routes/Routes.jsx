@@ -8,11 +8,13 @@ import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import MyToys from '../pages/MyToys/MyToys';
 import AddToys from '../pages/AddToys/AddToys';
 import ToysDetails from '../pages/ToysDetails/ToysDetails';
+import ErrorPage from '../Errorpage/ErrorPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Main></Main>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: '/',
@@ -52,7 +54,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'all-toys/:id',
-        element: <ToysDetails></ToysDetails>,
+        element: (
+          <PrivateRoute>
+            <ToysDetails></ToysDetails>
+          </PrivateRoute>
+        ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/toys/${params.id}`),
       },

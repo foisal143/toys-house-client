@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../Authprovaider/Authprovaider';
-
+import logo from '/logo.png';
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
   const navitems = (
@@ -49,8 +49,11 @@ const Header = () => {
             {navitems}
           </ul>
         </div>
-        <Link to="/" className="cursor-pointer font-bold text-2xl">
-          Toys House
+        <Link
+          to="/"
+          className="cursor-pointer flex items-center  font-bold text-2xl"
+        >
+          <img className="w-20 h-20" src={logo} alt="logo" /> Toys House
         </Link>
       </div>
       <div className=" hidden lg:flex">
