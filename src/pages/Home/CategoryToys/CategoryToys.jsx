@@ -6,15 +6,39 @@ import AOS from 'aos';
 
 const CategoryToys = () => {
   const [category, setCategory] = useState('regular');
-  const [toys, setToys] = useState([]);
+
+  const [sportsToy, setSportsToy] = useState([]);
+  const [truckToys, setTruckToys] = useState([]);
+  const [regularToys, setRegularToys] = useState([]);
   const [loader, setLoader] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:5000/toys?category=${category}`)
-      .then(res => res.json())
-      .then(data => {
-        setToys(data);
-        setLoader(false);
-      });
+    if (category === 'regular') {
+      fetch(`http://localhost:5000/toys?category=${category}`)
+        .then(res => res.json())
+        .then(data => {
+          setRegularToys(data);
+          setLoader(false);
+        });
+      return;
+    }
+    if (category === 'sports car') {
+      fetch(`http://localhost:5000/toys?category=${category}`)
+        .then(res => res.json())
+        .then(data => {
+          setSportsToy(data);
+          setLoader(false);
+        });
+      return;
+    }
+    if (category === 'truck') {
+      fetch(`http://localhost:5000/toys?category=${category}`)
+        .then(res => res.json())
+        .then(data => {
+          setTruckToys(data);
+          setLoader(false);
+        });
+      return;
+    }
   }, [category]);
 
   useEffect(() => {
@@ -35,47 +59,57 @@ const CategoryToys = () => {
           <Tab onClick={() => setCategory('truck')}>Truck</Tab>
         </TabList>
 
-        {loader ? (
-          <div className="text-center mt-12">
-            <progress className="progress  w-56"></progress>
-          </div>
-        ) : (
-          <>
-            <TabPanel>
-              <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {toys ? (
-                  toys.map(toy => (
-                    <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
-                  ))
-                ) : (
-                  <p className="font-semibold text-center">No Toys here</p>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {toys ? (
-                  toys.map(toy => (
-                    <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
-                  ))
-                ) : (
-                  <p className="font-semibold text-center">No Toys here</p>
-                )}
-              </div>
-            </TabPanel>
-            <TabPanel>
-              <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {toys ? (
-                  toys.map(toy => (
-                    <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
-                  ))
-                ) : (
-                  <p className="font-semibold text-center">No Toys here</p>
-                )}
-              </div>
-            </TabPanel>
-          </>
-        )}
+        <TabPanel>
+          {loader ? (
+            <div className="text-center mt-12">
+              <progress className="progress  w-56"></progress>
+            </div>
+          ) : (
+            <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {regularToys ? (
+                regularToys.map(toy => (
+                  <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
+                ))
+              ) : (
+                <p className="font-semibold text-center">No Toys here</p>
+              )}
+            </div>
+          )}
+        </TabPanel>
+        <TabPanel>
+          {loader ? (
+            <div className="text-center mt-12">
+              <progress className="progress  w-56"></progress>
+            </div>
+          ) : (
+            <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {sportsToy ? (
+                sportsToy.map(toy => (
+                  <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
+                ))
+              ) : (
+                <p className="font-semibold text-center">No Toys here</p>
+              )}
+            </div>
+          )}
+        </TabPanel>
+        <TabPanel>
+          {loader ? (
+            <div className="text-center mt-12">
+              <progress className="progress  w-56"></progress>
+            </div>
+          ) : (
+            <div className="grid mt-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {truckToys ? (
+                truckToys.map(toy => (
+                  <CategoryToyCard key={toy._id} toy={toy}></CategoryToyCard>
+                ))
+              ) : (
+                <p className="font-semibold text-center">No Toys here</p>
+              )}
+            </div>
+          )}
+        </TabPanel>
       </Tabs>
     </div>
   );
